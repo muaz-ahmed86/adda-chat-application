@@ -1,12 +1,12 @@
   <%- include('../partials/header.ejs') %> 
 
-    <div id="login-container" style="height: 100vh;">
+    <div id="login-container" style="height: calc(100vh - 20px);">
       <div id="left-column"></div>
       <div id="branding">
         <img src="/images/logo.png" />
         <h1>Sign Up - Chat Application</h1>
       </div>
-      <div id="login-form" style="margin-bottom: -2.9rem;" >
+      <div id="login-form">
         <form 
             method="post" 
             action="/users/signup"
