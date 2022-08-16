@@ -16,6 +16,6 @@ router.post('/signup', decorateHtmlResponse("Signup"), isLogout, avatarUpload, u
 // users routers controlled by admin
 router.get('/', decorateHtmlResponse("Users"), isLoggedIn, getUser);
 router.post('/', isLoggedIn, avatarUpload, userValidators, userValidatorsHandler, addUser);
-router.delete('/:id', removeUser);
+router.delete('/:id', isLoggedIn, removeUser);
 
 module.exports = router;

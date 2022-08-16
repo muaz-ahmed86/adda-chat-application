@@ -26,6 +26,7 @@ const login = async (req, res, next) => {
             if(isValidPassword) {
                 // preparing obj for generating jwt token
                 const userObj = {
+                    id: user._id,
                     username: user.name,
                     email: user.email,
                     mobile: user.mobile,
