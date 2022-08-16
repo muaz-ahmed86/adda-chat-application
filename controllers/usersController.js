@@ -1,5 +1,4 @@
 // external imports
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const path = require('path');
 const { unlink } = require('fs');
