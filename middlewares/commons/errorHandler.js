@@ -1,7 +1,8 @@
-const createError = require('http-errors')
+// external imports
+const createError = require('http-errors');
 
 const notFoundHandler = (req, res, next) => {
-    next(createError(404, "Your requested content has not been found!"))
+    next(createError(404, "Your requested content has not been found!"));
 }
 
 const errorHandler = (err, req, res, next) => {

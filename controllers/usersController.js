@@ -1,7 +1,141 @@
-const getUser = (req, res, next) => {
-    res.render('pages/users')
+// external imports
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const path = require('path');
+const { unlink } = require('fs');
+
+// internal imports
+const User = require('../models/User');
+
+// routes
+const getUser = async (req, res, next) => {
+    try {
+        const users = await User.find();
+
+        res.render('pages/users', {
+            users,
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
+const addUser = async (req, res, next) => {
+    let newUser;
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+    if(req.files && req.files.length > 0) {
+        newUser = new User({
+            ...req.body,
+            avatar: req.files[0].filename,
+            password: hashedPassword
+        })
+    } else {
+        newUser = new User({
+            ...req.body,
+            password: hashedPassword
+        })
+    }
+     try {
+        const result = await newUser.save();
+        
+        res.status(200).json({
+            result,
+            message: 'User created successfully!'
+        })
+     } catch (error) {
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!',
+                }
+            }
+        })
+     }
+}
+
+const removeUser = async (req, res, next) => {
+    try {
+        const user = await User.findByIdAndDelete({
+            _id: req.params.id,
+        })
+
+        // removing user avatar if have
+        if(user.avatar) {
+            unlink(
+                path.join(__dirname, `/../public/uploads/avatars/${user.avatar}`),
+                (err) => {
+                    if(err) console.log(err);
+                }
+            )
+        }
+
+        res.status(200).json({
+            message: 'User has been removed successfully!'
+        });
+    } catch (error) {
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'User could not be deleted!'
+                }
+            }
+        })
+    }
+}
+
+const getSignup = (req, res, next) => {
+    res.render('pages/signup')
+}
+
+const postSignup = async (req, res, next) => {
+    let newUser;
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    if(req.files && req.files.length > 0) {
+        newUser = new User({
+            ...req.body,
+            avatar: req.files[0].filename,
+            password: hashedPassword
+        })
+    } else {
+        newUser = new User({
+            ...req.body,
+            password: hashedPassword
+        })
+    }
+    try {
+        const result = await newUser.save();
+        
+        if(res.locals.html) {
+            res.redirect('/')
+        }
+        res.status(200).json({
+            result,
+            message: 'User created successfully!'
+        })
+    } catch (error) {
+        res.render('pages/signup', {
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!'
+                }
+            }
+        })
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!',
+                }
+            }
+        })
+    }  
+}
+
+// exporting modules
 module.exports = {
-    getUser
+    getUser,
+    addUser,
+    removeUser,
+    getSignup,
+    postSignup
 }
