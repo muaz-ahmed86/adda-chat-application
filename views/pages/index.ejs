@@ -1,9 +1,10 @@
 <%- include('../partials/header.ejs') %> 
+<%- include('../partials/menu.ejs') %> 
 
     <div id="login-container">
       <div id="left-column"></div>
       <div id="branding">
-        <img src="./images/logo.png" />
+        <img src="/images/logo.png" />
         <h1>Login - Chat Application</h1>
       </div>
       <div id="login-form">
@@ -27,10 +28,10 @@
           <% } %>
           
           <input type="submit" value="Login" />
-          <!-- ---extra added -->
-          <p class="signup">Don't Have an account? <a href="/users/signup">Signup</a></p>
-          <!-- --- -->
         </form>
+        <!-- ---extra added -->
+        <p class="signup">Don't Have an account? <a href="/users/signup">Signup</a></p>
+        <!-- --- -->
       </div>
     </div>
   

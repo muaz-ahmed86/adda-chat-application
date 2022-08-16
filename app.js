@@ -25,10 +25,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // set view engine
-app.set('view engine', 'ejs');
-
+app.set('view engine', 'ejs')
+app.set('views', 'views')
 // set public folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 // parse cookie
 app.use(cookieParser(process.env.COOKIE_SECRET));

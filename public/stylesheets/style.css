@@ -1,8 +1,8 @@
 /*
  * Title: Project style sheet
  * Description: This is the main project style sheet of this project
- * Author: Sumit Saha ( Learn with Sumit )
- * Date: 23/05/2021
+ * Author: Md Muaz Ahmed (MuazCodingAcademy)
+ * Date: 14/08/2022
  *
  */
 
@@ -582,33 +582,7 @@ input[type="submit"]:active {
     "left-column login-form";
 }
 
-/* signup related styles */
-#signup-container {
-  display: grid;
-  /* min-width: 800px; */
-  max-width: 1000px;
-  width: 100%;
-  height: calc(100vh - 70px);
-  background: var(--primary);
-  border-radius: 10px;
-  grid-template-areas:
-    "signup-left-column signup-branding"
-    "signup-left-column signup-form";
-}
-
 #left-column {
-  grid-area: left-column;
-  background-color: var(--tertiary);
-  background-image: url("../images/illustration.png");
-  background-size: 68%;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-/* signup related styles */
-#signup-left-column {
   grid-area: left-column;
   background-color: var(--tertiary);
   background-image: url("../images/illustration.png");
@@ -637,24 +611,6 @@ input[type="submit"]:active {
   width: 100px;
 }
 
-/* signup related styles  */
-#signup-branding {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  grid-area: signup-branding;
-}
-
-#signup-branding h1 {
-  color: var(--light);
-}
-
-#signup-branding img {
-  width: 100px;
-}
-
 /* Form Section */
 #login-form {
   padding: 2rem;
@@ -662,20 +618,6 @@ input[type="submit"]:active {
 }
 
 #login-form form {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0 auto;
-}
-
-/* signup related styles  */
-#signup-form {
-  padding: 2rem;
-  grid-area: login-form;
-}
-
-#signup-form form {
   width: 80%;
   display: flex;
   flex-direction: column;

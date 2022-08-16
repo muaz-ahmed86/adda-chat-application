@@ -1,4 +1,5 @@
 <%- include('../partials/header.ejs') %> 
+<%- include('../partials/menu.ejs') %>  
 
     <div class="manageUser-container">
       <div id="title">
@@ -23,15 +24,15 @@
               <tr id="<%= user._id %>">
                 <td class="name">
                   <% if(user.avatar) { %> 
-                    <img src="./uploads/avatars/<%= user.avatar %>" />
+                    <img src="/uploads/avatars/<%= user.avatar %>" />
                   <% } else { %>
-                    <img src="./images/nophoto.png" alt="No Photo" />  
+                    <img src="/images/nophoto.png" alt="No Photo" />  
                   <% } %> 
                   <span><%= user.name %></span>
                 </td>
                 <td><%= user.email %></td>
                 <td class="manage">
-                  <img src="./images/trash.png" alt="Delete" onclick="deleteUser('<%= user._id %>')" />
+                  <img src="/images/trash.png" alt="Delete" onclick="deleteUser('<%= user._id %>')" />
                 </td>
               </tr>
             <% }) %> 

@@ -1,12 +1,12 @@
   <%- include('../partials/header.ejs') %> 
 
-    <div id="signup-container">
-      <div id="signup-left-column"></div>
-      <div id="signup-branding">
-        <img src="./images/logo.png" />
+    <div id="login-container" style="height: 100vh;">
+      <div id="left-column"></div>
+      <div id="branding">
+        <img src="/images/logo.png" />
         <h1>Sign Up - Chat Application</h1>
       </div>
-      <div id="signup-form">
+      <div id="login-form" style="margin-bottom: -2.9rem;" >
         <form 
             method="post" 
             action="/users/signup"
@@ -60,13 +60,12 @@
 
           <% if (errors.common) { %>
             <p class="error show"><%= errors.common.msg %></p>
-          <% } %>
-          
-          <input type="submit" value="Signup" />
-          <!-- ---extra added -->
-          <p class="signup">Have an account? <a href="/">Login</a></p>
-          <!-- --- -->
+          <% } %>          
+          <input type="submit" value="Signup" />  
         </form>
+        <!-- --- extra added -->
+        <p class="signup">Have an account? <a href="/">Login</a></p>
+        <!-- ---- -->
       </div>
     </div>
     
