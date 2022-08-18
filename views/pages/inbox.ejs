@@ -5,9 +5,9 @@
         <input type="text" placeholder="Search" />
       </div>
       <div id="conversation-list">
-        <% data.forEach(function(conversation) { %>
+        <% data.forEach((conversation) => { %>
           <!-- conversation creator is same to logged in user, so we need to show participant name and avatar -->
-          <% if(conversation.creator.id == loggedInUser.userid) { %>
+          <% if(conversation.creator._id == loggedInUser.id) { %>
             <div class="conversation" onclick="getMessages('<%= conversation._id %>', '<%= conversation.participant.name %>')">
               <% if (conversation.participant.avatar) { %>
               <img src="/uploads/avatars/<%= conversation.participant.avatar %>" alt="<%= conversation.participant.name %>" />
@@ -28,7 +28,7 @@
               <div class="conversation-date"><%= moment(conversation.last_updated).fromNow() %></div>
             </div>
           <% } %>
-        <% }); %>
+        <% }) %>
         
         <!-- show no conversation placeholder image for 0 conversations -->
         <% if(data && data.length === 0) { %>
@@ -58,7 +58,7 @@
       </form>
 
     </div>
-    <%- include('../partials/add-conversation-modal.ejs'); %>
+    <%- include('../partials//addConversationModal.ejs'); %>
 
     <!-- import socket io client from cdn -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>

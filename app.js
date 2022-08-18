@@ -2,8 +2,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const path = require('path');
 const cookieParser = require('cookie-parser');
+const moment = require('moment');
 
 // internal imports
 const { notFoundHandler, errorHandler } = require('./middlewares/commons/errorHandler');
@@ -11,6 +11,9 @@ const setRouter = require('./routes/routes')
 
 const app = express();
 dotenv.config();
+
+// set moment as app locals
+app.locals.moment = moment;
 
 // database connection
 mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
