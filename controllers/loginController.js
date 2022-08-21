@@ -48,7 +48,7 @@ const login = async (req, res, next) => {
 
                 // set loggedIn user info to locals variable so that it can be accessible from templete
                 res.locals.loggedInUser = userObj; 
-                res.render('pages/inbox');
+                res.redirect('/inbox');
             } else {
                 throw createError('Login failed! Please try again.')
             }

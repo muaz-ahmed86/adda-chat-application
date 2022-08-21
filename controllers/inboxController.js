@@ -4,8 +4,8 @@ const createError = require('http-errors');
 // internal imports
 const Conversation = require('../models/Conversation');
 const User = require('../models/User');
-
-const escape = require('../utils/escape')
+const Message = require('../models/Message');
+const escape = require('../utils/escape');
 
 const getInbox = async (req, res, next) => {
     try {
@@ -26,11 +26,11 @@ const getInbox = async (req, res, next) => {
 
 const searchUsers = async (req, res, next) => {
     const searchKeyword = req.body.searchKeyword;
-    const searchQuery = searchKeyword.replace('+88', "");
+    const searchQuery = searchKeyword.replace("+88", "");
 
     const name_search_regex = new RegExp(escape(searchQuery), "i");
-    const email_search_regex = new RegExp("^" + escape("+88" + searchQuery));
-    const mobile_search_regex = new RegExp("^" + escape(searchQuery) + "$", "i");
+    const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
+    const email_search_regex = new RegExp("^" + escape(searchQuery) + "$", "i");
 
     try {
         if(searchQuery !== "") {
@@ -87,8 +87,100 @@ const addConversation = async (req, res, next) => {
     }
 }
 
+const getMessages = async (req, res, next) => {
+    try {
+        const messages = await Message.find({ 
+            conversation_id: req.params.conversation_id
+        })
+        .populate('sender')
+        .sort('-createdAt');
+
+        const { participant } = await Conversation.findById(req.params.conversation_id)
+                .populate('participant');
+
+        res.status(200).json({
+            data: {
+                messages: messages,
+                participant: participant
+            },
+            user: req.user.id,
+            conversation_id: req.params.conversation_id
+        })
+    } catch (error) {
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!'
+                }
+            }
+        })
+    }
+}
+
+const sendMessage = async (req, res, next) => {
+    if(req.body.message || (req.files && req.files.length > 0)) {
+        try {
+            let attachments = null;
+
+            if(req.files && req.files.length > 0) {
+                attachments = [];
+                
+                req.files.forEach(file => {
+                    attachments.push(file.filename)
+                })
+            }
+
+            const newMessage = new Message({
+                text: req.body.message,
+                attachment: attachments,
+                sender: req.user.id,
+                receiver: req.body.receiverId,
+                conversation_id: req.body.conversationId,
+            })
+
+            const result = await newMessage.save();
+
+            // emit socket event
+            global.io.emit("new_message", {
+                message: {
+                    conversation_id: req.body.conversationId,
+                    sender: {
+                        id: req.user.id,
+                        name: req.user.username,
+                        avatar: req.user.avatar
+                    },
+                    message: req.body.message,
+                    attachment: attachments,
+                    date_time: result.date_time
+                },
+            });
+
+            res.status(200).json({
+                message: 'Successful',
+                data: result
+            })
+        } catch (error) {
+            res.status(500).json({
+                errors: {
+                    common: {
+                        msg: error.message
+                    }
+                }
+            })
+        }
+    } else {
+        res.status(500).json({
+            errors: {
+                common: 'message text or attachment is required!'
+            }
+        })
+    }
+}
+
 module.exports = {
     getInbox,
     searchUsers,
-    addConversation
+    addConversation,
+    getMessages,
+    sendMessage
 }

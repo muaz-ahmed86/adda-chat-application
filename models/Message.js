@@ -5,9 +5,11 @@ const messageSchema = new Schema({
         type: String,
         maxlength: 1000
     },
-    attachment: {
-        type: String,
-    },
+    attachment: [
+        { 
+            type: String,
+        },
+    ],
     sender: {
         type: Schema.Types.ObjectId,
         ref: 'User',

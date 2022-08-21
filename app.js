@@ -4,13 +4,19 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const moment = require('moment');
+const http = require('http');
 
 // internal imports
 const { notFoundHandler, errorHandler } = require('./middlewares/commons/errorHandler');
 const setRouter = require('./routes/routes')
 
 const app = express();
+const server = http.createServer(app)
 dotenv.config();
+
+// socket creation
+const io = require('socket.io')(server);
+global.io = io;
 
 // set moment as app locals
 app.locals.moment = moment;
@@ -46,4 +52,4 @@ app.use(notFoundHandler)
 app.use(errorHandler)
 
 // app listen
-app.listen(process.env.PORT, ()=> console.log(`App is runnig on port ${process.env.PORT}`));
+server.listen(process.env.PORT, ()=> console.log(`App is runnig on port ${process.env.PORT}`));
