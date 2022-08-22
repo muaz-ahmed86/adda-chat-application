@@ -75,6 +75,8 @@
   
       // get response
       let result = await response.json();
+      
+      const { users, userId } = result;
   
       // handle error and response
       if (result.errors) {
@@ -82,21 +84,26 @@
         errorplaceholder.textContent = result.errors.common.msg;
         errorplaceholder.style.display = "block";
       } else {
-        if (result.length > 0) {
+        if (users.length > 0) {
+
           let generatedHtml = "<ul>";
-          result.forEach((user) => {
-            const avatar = user.avatar
+          users.forEach((user) => {
+            let isUserItself = user._id === userId;
+
+            if(!isUserItself) {
+              const avatar = user.avatar
               ? "/uploads/avatars/" + user.avatar
               : "/images/nophoto.png";
-  
-            generatedHtml += `<li onclick="createConversation('${user._id}', '${user.name}', '${user.avatar}')">
-                <div class="user">
-                  <div class="avatar">
-                    <img src="${avatar}" />
+    
+              generatedHtml += `<li onclick="createConversation('${user._id}', '${user.name}', '${user.avatar}')">
+                  <div class="user">
+                    <div class="avatar">
+                      <img src="${avatar}" />
+                    </div>
+                    <div class="username">${user.name}</div>
                   </div>
-                  <div class="username">${user.name}</div>
-                </div>
-              </li>`;
+                </li>`;
+            }
           });
           generatedHtml += "</ul>";
           users_placeholder.innerHTML = generatedHtml;

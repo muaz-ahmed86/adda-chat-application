@@ -25,6 +25,7 @@ const getInbox = async (req, res, next) => {
 }
 
 const searchUsers = async (req, res, next) => {
+    const userId = req.user.id;
     const searchKeyword = req.body.searchKeyword;
     const searchQuery = searchKeyword.replace("+88", "");
 
@@ -41,7 +42,11 @@ const searchUsers = async (req, res, next) => {
                     {mobile: mobile_search_regex}
                 ]
             })
-            res.json(users)
+
+            res.json({
+                users,
+                userId
+            })
         } else {
             throw createError('Search input can not be empty!')
         }  
@@ -177,10 +182,66 @@ const sendMessage = async (req, res, next) => {
     }
 }
 
+// const searchConversation = async (req, res, next) => {
+//     const searchKeyword = req.body.searchKeyword;
+//     const searchQuery = searchKeyword.replace("+88", "");
+
+//     const name_search_regex = new RegExp(escape(searchQuery), "i");
+//     const mobile_search_regex = new RegExp("^" + escape("+88" + searchQuery));
+//     const email_search_regex = new RegExp("^" + escape(searchQuery) + "$", "i");
+
+//     try {
+//         if(searchQuery !== "") {
+//             const users = await User.find({
+//                 $or: [
+//                     {name: name_search_regex},
+//                     {email: email_search_regex},
+//                     {mobile: mobile_search_regex}
+//                 ]
+//             })
+//             res.json(users)
+//         } else {
+//             throw createError('Search input can not be empty!')
+//         }  
+//     } catch (error) {
+//         res.status(500).json({
+//             errors: {
+//                 common: {
+//                     msg: error.message
+//                 }
+//             }
+//         })
+//     }
+// }
+
+// delete conversation
+const removeConversation = async (req, res, next) => {
+    try {
+        const deletedMessages = await Message.deleteMany({
+            conversation_id: req.params.id,
+        });
+        const conversation = await Conversation.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({
+            message: 'Conversation has been removed successfully!'
+        });
+    } catch (error) {
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'Conversation could not be deleted!'
+                }
+            }
+        })
+    }
+}
+
 module.exports = {
     getInbox,
     searchUsers,
     addConversation,
     getMessages,
-    sendMessage
+    sendMessage,
+    // searchConversation,
+    removeConversation
 }
