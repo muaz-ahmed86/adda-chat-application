@@ -5,6 +5,8 @@ const { unlink } = require('fs');
 
 // internal imports
 const User = require('../models/User');
+const Conversation = require('../models/Conversation');
+const Message = require('../models/Message');
 
 // routes
 const getUser = async (req, res, next) => {
@@ -57,6 +59,14 @@ const removeUser = async (req, res, next) => {
     try {
         const user = await User.findByIdAndDelete({
             _id: req.params.id,
+        })
+
+        const deleteConversations = await Conversation.deleteMany({
+            $or: [{creator: req.params.id}, {participant: req.params.id}]
+        })
+
+        const deleteMessages = await Message.deleteMany({
+            $or: [{sender: req.params.id}, {receiver: req.params.id}]
         })
 
         // removing user avatar if have
