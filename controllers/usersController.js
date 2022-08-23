@@ -140,11 +140,73 @@ const postSignup = async (req, res, next) => {
     }  
 }
 
+const getEditUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id)
+        res.render('pages/editUser', {user})
+    } catch (error) {
+        next(error)
+    }
+}
+
+const postEditUser = async (req, res, next) => {
+    let { name, email, mobile } = req.body;
+    let updatedUser;
+    if(req.files && req.files.length > 0) {
+        updatedUser = {
+            name,
+            email,
+            mobile,
+            avatar: req.files[0].filename,
+        };
+    } else {
+        updatedUser = {
+            name, email, mobile,
+        }
+    }
+    try {
+        const result = await User.findOneAndUpdate(
+            {_id: req.params.id},
+            {$set: updatedUser},
+            {new: true}
+        );
+        
+        if(res.locals.html) {
+            if(req.user.id === req.params.id) {
+                res.redirect('/inbox')
+            } else {
+                res.redirect('/users')
+            }
+        }
+        res.status(200).json({
+            result,
+            message: 'User created successfully!'
+        })
+    } catch (error) {
+        res.render('pages/editUser', {
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!'
+                }
+            }
+        })
+        res.status(500).json({
+            errors: {
+                common: {
+                    msg: 'Unknown error occurred!',
+                }
+            }
+        })
+    } 
+}
+
 // exporting modules
 module.exports = {
     getUser,
     addUser,
     removeUser,
     getSignup,
-    postSignup
+    postSignup,
+    getEditUser,
+    postEditUser,
 }

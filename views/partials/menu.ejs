@@ -4,12 +4,16 @@
     <div class="menu-item"><a href="/users">Users</a></div>
     <div class="menu-item">
       <% if (loggedInUser && loggedInUser.avatar) { %>
-      <img
-        src="/uploads/avatars/<%= loggedInUser.avatar %>"
-        alt="<%= loggedInUser.name %>"
-      />
+        <a href="/users/edit/<%= loggedInUser.id %>" style="cursor: pointer; margin-right: 5px;">
+          <img
+            src="/uploads/avatars/<%= loggedInUser.avatar %>"
+            alt="<%= loggedInUser.name %>"
+          />
+        </a>
       <% } else { %>
-      <img src="/images/nophoto.png" alt="<%= loggedInUser.name %>" />
+        <a href="/users/edit/<%= loggedInUser.id %>" style="cursor: pointer; margin-right: 5px;">
+          <img src="/images/nophoto.png" alt="<%= loggedInUser.name %>" />
+        </a>
       <% } %>
       <a href="#" onclick="logout()">Logout</a>
     </div>

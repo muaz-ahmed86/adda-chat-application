@@ -23,12 +23,14 @@
             <% users.forEach(user => { %> 
               <tr id="<%= user._id %>">
                 <td class="name">
-                  <% if(user.avatar) { %> 
-                    <img src="/uploads/avatars/<%= user.avatar %>" />
-                  <% } else { %>
-                    <img src="/images/nophoto.png" alt="No Photo" />  
-                  <% } %> 
-                  <span><%= user.name %></span>
+                  <a href="/users/edit/<%= user._id %>" style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+                    <% if(user.avatar) { %> 
+                      <img src="/uploads/avatars/<%= user.avatar %>" />
+                    <% } else { %>
+                      <img src="/images/nophoto.png" alt="No Photo" />  
+                    <% } %> 
+                    <span style="color: #eee;"><%= user.name %></span>
+                  </a>
                 </td>
                 <td><%= user.email %></td>
                 <td class="manage">
@@ -78,8 +80,7 @@
           }
         } else {
           cannotDeleteToast.showToast();
-        }
-        
+        }  
       }
     </script>
   </body>

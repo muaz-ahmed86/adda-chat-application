@@ -1,4 +1,6 @@
+// external imports
 const jwt = require('jsonwebtoken');
+const createError = require('http-errors');
 
 const isLoggedIn = (req, res, next) => {
     const cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null
@@ -48,7 +50,29 @@ const isLogout = (req, res, next) => {
     }
 }
 
+// guard to protect routes that need role based authorization
+function requireRole(role) {
+    return function (req, res, next) {
+      if (req.user.role && role.includes(req.user.role)) {
+        next();
+      } else {
+        if (res.locals.html) {
+          next(createError(401, "You are not authorized to access this page!"));
+        } else {
+          res.status(401).json({
+            errors: {
+              common: {
+                msg: "You are not authorized!",
+              },
+            },
+          });
+        }
+      }
+    };
+  }
+
 module.exports = {
     isLoggedIn,
-    isLogout
+    isLogout,
+    requireRole
 }
