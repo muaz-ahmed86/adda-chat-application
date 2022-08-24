@@ -116,7 +116,7 @@ const postSignup = async (req, res, next) => {
         const result = await newUser.save();
         
         if(res.locals.html) {
-            res.redirect('/')
+            return res.redirect('/')
         }
         res.status(200).json({
             result,
@@ -173,9 +173,9 @@ const postEditUser = async (req, res, next) => {
         
         if(res.locals.html) {
             if(req.user.id === req.params.id) {
-                res.redirect('/inbox')
+                return res.redirect('/inbox')
             } else {
-                res.redirect('/users')
+                return res.redirect('/users')
             }
         }
         res.status(200).json({
